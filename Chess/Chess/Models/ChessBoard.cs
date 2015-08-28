@@ -9,11 +9,11 @@ using Chess.Enums;
 
 namespace Chess.Models
 {
-    public class Board
+    public class ChessBoard
     {
         public Square[,] Squares { get; private set; }
 
-        public Board()
+        public ChessBoard()
         {
             Squares = new Square[8, 8];
             for (int row = 0; row < 8; row++)

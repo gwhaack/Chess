@@ -44,12 +44,8 @@
     <Compile Include="Enums\MovementDistance.cs" />
     <Compile Include="Enums\PieceColor.cs" />
     <Compile Include="Enums\SquareColor.cs" />
-<<<<<<< HEAD
-=======
-    <Compile Include="Exceptions\IllegalMoveException.cs" />
->>>>>>> 747994b1893a8ac38642edfccb432ff3d785761b
     <Compile Include="Models\Pieces\Piece.cs" />
-    <Compile Include="Models\Board.cs" />
+    <Compile Include="Models\ChessBoard.cs" />
     <Compile Include="Models\Pieces\PieceMovedEventArgs.cs" />
     <Compile Include="Models\Square.cs" />
     <Compile Include="Models\Pieces\Bishop.cs" />

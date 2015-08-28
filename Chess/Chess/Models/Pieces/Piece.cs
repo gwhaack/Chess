@@ -1,5 +1,4 @@
 ﻿using Chess.Enums;
-using Chess.Exceptions;
 using Chess.Models;
 using System;
 using System.Collections.Generic;
