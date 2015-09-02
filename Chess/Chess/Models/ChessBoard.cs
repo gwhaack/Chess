@@ -47,9 +47,13 @@ namespace Chess.Models
                     }
                     square.Piece = piece;
                     Squares[row, col] = square;
-
                 }
             }
+        }
+
+        public void Move(Piece piece, Square newSquare)
+        {
+            bool legalMove = 
         }
     }
 }
