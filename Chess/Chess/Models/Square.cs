@@ -1,5 +1,4 @@
 ﻿using Chess.Enums;
-using Chess.Models.Pieces;
 using System;
 
 namespace Chess.Models
@@ -10,16 +9,12 @@ namespace Chess.Models
 
         public readonly int Row;
         public readonly int Column;
+        private readonly SquareColor _color;
         public SquareColor Color
         {
-            get
-            {
-                return (Row + Column) % 2 == 0
-                    ? SquareColor.Dark
-                    : SquareColor.Light;
-            }
+            get { return _color; }
         }
-        public string Name
+        public string Id
         {
             get
             {
@@ -32,6 +27,9 @@ namespace Chess.Models
         {
             Row = row;
             Column = column;
+            _color = (row + column) % 2 == 0
+                    ? SquareColor.Dark
+                    : SquareColor.Light;
         }
     }
 }
