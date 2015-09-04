@@ -5,10 +5,8 @@ namespace Chess.Models
 {
     public class Square
     {
-        public const string Columns = "abcdefgh";
-
+        public readonly Column Column;
         public readonly int Row;
-        public readonly int Column;
         private readonly SquareColor _color;
         public SquareColor Color
         {
@@ -18,18 +16,18 @@ namespace Chess.Models
         {
             get
             {
-                return String.Format("{0}{1}", Columns[Column], Row);
+                return String.Format("{0}{1}", Column, Row);
             }
         }
         public Piece Piece { get; set; }
 
-        public Square(int row, int column)
+        public Square(Column column, int row)
         {
-            Row = row;
             Column = column;
-            _color = (row + column) % 2 == 0
-                    ? SquareColor.Dark
-                    : SquareColor.Light;
+            Row = row;
+            _color = (row + (int) column) % 2 == 0
+                ? SquareColor.Dark
+                : SquareColor.Light;
         }
     }
 }

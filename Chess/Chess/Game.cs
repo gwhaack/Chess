@@ -8,21 +8,26 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    public class ChessService
+    public class Game
     {
-        private ChessBoard ChessBoard;
+        private Board ChessBoard;
+        private Set BlackPieces;
+        private Set WhitePieces;
 
         public void NewGame()
         {
-            ChessBoard = new ChessBoard();
-            for (int row = 0; row < 8; row++)
+            BlackPieces = new Set(PieceColor.Black);
+            WhitePieces = new Set(PieceColor.White);
+            ChessBoard = new Board();
+            for (int col = 1; col <= 8; col++)
             {
-                for (int col = 0; col < 8; col++)
+                var column = (Column) col;
+                for (int row = 1; row <= 8; row++)
                 {
-                    var square = new Square(row, col);
+                    var square = new Square(column, row);
                     if (row > 2 && row < 7)
                     {
-                        ChessBoard.Squares[row, col] = square;
+                        ChessBoard[column, row] = square;
                         continue;
                     }
                     Piece piece = null;
@@ -75,7 +80,7 @@ namespace Chess
                         }
                     }
                     square.Piece = piece;
-                    ChessBoard[row, col] = square;
+                    ChessBoard[column, row] = square;
                 }
             }
         }
@@ -101,67 +106,75 @@ namespace Chess
             switch (piece.Type)
             {
                 case PieceType.Bishop:
-                    return LegalBishopMoves(currentSquare);
+                    return LegalBishopMoves(currentSquare, piece.Color);
                 case PieceType.King:
-                    return LegalKingMoves(currentSquare);
+                    return LegalKingMoves(currentSquare, piece.Color);
                 case PieceType.Knight:
-                    return LegalKnightMoves(currentSquare);
+                    return LegalKnightMoves(currentSquare, piece.Color);
                 case PieceType.Pawn:
-                    return LegalPawnMoves(currentSquare);
+                    return LegalPawnMoves(currentSquare, piece.Color);
                 case PieceType.Queen:
-                    return LegalQueenMoves(currentSquare);
+                    return LegalQueenMoves(currentSquare, piece.Color);
                 case PieceType.Rook:
-                    return LegalRookMoves(currentSquare);
+                    return LegalRookMoves(currentSquare, piece.Color);
                 default:
                     return new List<Square>();
             }
         }
-
+        
         private IList<Square> LegalBishopMoves(Square currentSquare, PieceColor currentColor)
         {
             var legalMoves = new List<Square>();
-            Square current = currentSquare;
-            while(true)
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.UpperLeft, currentColor));
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.UpperRight, currentColor));
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.LowerLeft, currentColor));
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.LowerRight, currentColor));
+            return legalMoves;
+        }
+
+        private IList<Square> LegalKingMoves(Square currentSquare, PieceColor currentColor)
+        {
+            var legalMoves = new List<Square>();
+            foreach (Direction direction in Enum.GetValues(typeof (Direction)))
             {
-                var next = NextSquare(currentSquare, Direction.UpperLeft);
-                if (next == null) break;
-                if (next.Piece == null || next.Piece.Color != currentColor)
-                {
-                    legalMoves.Add(next);
-                    current = next;
-                    continue;
-                }
+                legalMoves.Add(NextLegalMove(currentSquare, direction, currentColor));
             }
+            return legalMoves;
         }
 
-        private IList<Square> LegalKingMoves(Square currentSquare)
+        private IList<Square> LegalKnightMoves(Square currentSquare, PieceColor currentColor)
         {
-
+            throw new NotImplementedException();
         }
 
-        private IList<Square> LegalKnightMoves(Square currentSquare)
+        private IList<Square> LegalPawnMoves(Square currentSquare, PieceColor currentColor)
         {
-
+            throw new NotImplementedException();
         }
 
-        private IList<Square> LegalPawnMoves(Square currentSquare)
+        private IList<Square> LegalQueenMoves(Square currentSquare, PieceColor currentColor)
         {
-
+            var legalMoves = new List<Square>();
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                legalMoves.AddRange(NextLegalMoves(currentSquare, direction, currentColor));
+            }
+            return legalMoves;
         }
 
-        private IList<Square> LegalQueenMoves(Square currentSquare)
+        private IList<Square> LegalRookMoves(Square currentSquare, PieceColor currentColor)
         {
-
-        }
-
-        private IList<Square> LegalRookMoves(Square currentSquare)
-        {
-
+            var legalMoves = new List<Square>();
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.Up, currentColor));
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.Down, currentColor));
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.Left, currentColor));
+            legalMoves.AddRange(NextLegalMoves(currentSquare, Direction.Right, currentColor));
+            return legalMoves;
         }
         private Square NextSquare(Square start, Direction direction)
         {
+            int col = (int) start.Column;
             int row = start.Row;
-            int column = start.Column;
             switch (direction)
             {
                 case Direction.Up:
@@ -171,33 +184,60 @@ namespace Chess
                     row -= 1;
                     break;
                 case Direction.Left:
-                    column -= 1;
+                    col -= 1;
                     break;
                 case Direction.Right:
-                    column += 1;
+                    col += 1;
                     break;
                 case Direction.UpperLeft:
                     row += 1;
-                    column -= 1;
+                    col -= 1;
                     break;
                 case Direction.UpperRight:
                     row += 1;
-                    column += 1;
+                    col += 1;
                     break;
                 case Direction.LowerLeft:
                     row -= 1;
-                    column -= 1;
+                    col -= 1;
                     break;
                 case Direction.LowerRight:
                     row -= 1;
-                    column += 1;
+                    col += 1;
                     break;
                 default:
                     return null;
             }
-            if (row > 8 || row < 0 || column > 8 || column < 0)
+            if (row > 8 || row < 0 || col > 8 || col < 0)
                 return null;
-            return ChessBoard[row, column];
+            return ChessBoard[(Column) col, row];
+        }
+
+        private Square NextLegalMove(Square currentSquare, Direction direction, PieceColor currentColor)
+        {
+            var next = NextSquare(currentSquare, direction);
+            if (next == null) return null;
+            if (next.Piece == null || next.Piece.Color != currentColor)
+                return next;
+            return null;
+        }
+
+        private IList<Square> NextLegalMoves(Square currentSquare, Direction direction, PieceColor currentColor)
+        {
+            var nextLegalMoves = new List<Square>();
+            var current = currentSquare;
+            while (true)
+            {
+                var next = NextLegalMove(currentSquare, direction, currentColor);
+                if (next == null) break;
+                if (next.Piece == null || next.Piece.Color != currentColor)
+                {
+                    nextLegalMoves.Add(next);
+                    current = next;
+                }
+                else break;
+            }
+            return nextLegalMoves;
         }
     }
 }
