@@ -1,5 +1,6 @@
 ﻿using Chess.Enums;
 using Chess.Models;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
@@ -8,40 +9,52 @@ namespace Chess.Tests
     [ExcludeFromCodeCoverage]
     public class BoardTests
     {
+        [Fact]
+        [Trait("Chess", "Models")]
         public void Index_a1()
         {
             var board = new Board();
-            Assert.Equal(board[Column.a, 1].Id, "a1");
+            Assert.Equal(board["a1"].Id, "a1");
         }
 
+        [Fact]
+        [Trait("Chess", "Models")]
         public void Index_h8()
         {
             var board = new Board();
-            Assert.Equal(board[Column.h, 8].Id, "h8");
+            Assert.Equal(board["h8"].Id, "h8");
         }
 
-        public void Index_00_Null()
+        [Fact]
+        [Trait("Chess", "Models")]
+        public void Index_z0_Null()
         {
             var board = new Board();
-            Assert.Null(board[0, 0]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => board["z0"]);
         }
 
-        public void Index_01_Null()
+        [Fact]
+        [Trait("Chess", "Models")]
+        public void Index_i1_Null()
         {
             var board = new Board();
-            Assert.Null(board[0, 1]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => board["i1"]);
         }
 
+        [Fact]
+        [Trait("Chess", "Models")]
         public void Index_a0_Null()
         {
             var board = new Board();
-            Assert.Null(board[Column.a, 0]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => board["a0"]);
         }
 
+        [Fact]
+        [Trait("Chess", "Models")]
         public void Index_h9_Null()
         {
             var board = new Board();
-            Assert.Null(board[Column.h, 9]);
+            Assert.Throws<ArgumentOutOfRangeException>(() => board["h9"]);
         }
     }
 }

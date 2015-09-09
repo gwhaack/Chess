@@ -16,7 +16,7 @@ namespace Chess.Models
         {
             get
             {
-                return String.Format("{0}{1}", Column, Row);
+                return GetId(Column, Row);
             }
         }
         public Piece Piece { get; set; }
@@ -28,6 +28,11 @@ namespace Chess.Models
             _color = (row + (int) column) % 2 == 0
                 ? SquareColor.Dark
                 : SquareColor.Light;
+        }
+
+        public static string GetId(Column column, int row)
+        {
+            return String.Format("{0}{1}", column, row);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Chess.Tests
     public class SquareTests
     {
         [Fact]
+        [Trait("Chess", "Models")]
         public void Ctor_a1()
         {
             int row = 1;
@@ -25,6 +26,7 @@ namespace Chess.Tests
         }
 
         [Fact]
+        [Trait("Chess", "Models")]
         public void Ctor_h7()
         {
             var column = Column.h;

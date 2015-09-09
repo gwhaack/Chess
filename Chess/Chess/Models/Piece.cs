@@ -25,15 +25,5 @@ namespace Chess.Models
             _type = type;
             _color = color;
         }
-
-        public static IEnumerable<Piece> Generate(PieceType type, PieceColor color, int quantity)
-        {
-            var pieces = new List<Piece>();
-            for (int i = 0; i < quantity; i++)
-            {
-                pieces.Add(new Piece(type, color));
-            }
-            return pieces;
-        }
     }
 }

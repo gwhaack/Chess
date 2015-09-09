@@ -11,11 +11,14 @@ namespace Chess.Models
         {
             get { return _color; }
         }
-        private readonly IEnumerable<Piece> _pieces;
-        public IEnumerable<Piece> Pieces
+
+        private readonly List<Piece> _pieces;
+        public IReadOnlyCollection<Piece> Pieces
         {
-            get { return _pieces; }
+            get { return _pieces.AsReadOnly(); }
         }
+
+        #region Pieces
 
         private readonly Piece _king;
         public Piece King
@@ -29,54 +32,132 @@ namespace Chess.Models
             get { return _queen; }
         }
 
-        private readonly IEnumerable<Piece> _bishops;
-        public IEnumerable<Piece> Bishops
+        private readonly Piece _rookA;
+        public Piece RookA
         {
-            get { return _bishops; }
+            get { return _rookA; }
         }
 
-        private readonly IEnumerable<Piece> _knights;
-        public IEnumerable<Piece> Knights
+        private readonly Piece _rookH;
+        public Piece RookH
         {
-            get { return _knights; }
+            get { return _rookH; }
         }
 
-        private readonly IEnumerable<Piece> _rooks;
-        public IEnumerable<Piece> Rooks
+        private readonly Piece _knightB;
+        public Piece KnightB
         {
-            get { return _rooks; }
+            get { return _knightB; }
         }
 
-        private readonly IEnumerable<Piece> _pawns;
-        public IEnumerable<Piece> Pawns
+        private readonly Piece _knightG;
+        public Piece KnightG
         {
-            get { return _pawns; }
+            get { return _knightG; }
         }
+
+        private readonly Piece _bishopC;
+        public Piece BishopC
+        {
+            get { return _bishopC; }
+        }
+
+        private readonly Piece _bishopF;
+        public Piece BishopF
+        {
+            get { return _bishopF; }
+        }
+
+        private readonly Piece _pawnA;
+        public Piece PawnA
+        {
+            get { return _pawnA; }
+        }
+
+        private readonly Piece _pawnB;
+        public Piece PawnB
+        {
+            get { return _pawnB; }
+        }
+
+        private readonly Piece _pawnC;
+        public Piece PawnC
+        {
+            get { return _pawnC; }
+        }
+
+        private readonly Piece _pawnD;
+        public Piece PawnD
+        {
+            get { return _pawnD; }
+        }
+
+        private readonly Piece _pawnE;
+        public Piece PawnE
+        {
+            get { return _pawnE; }
+        }
+
+        private readonly Piece _pawnF;
+        public Piece PawnF
+        {
+            get { return _pawnF; }
+        }
+
+        private readonly Piece _pawnG;
+        public Piece PawnG
+        {
+            get { return _pawnG; }
+        }
+
+        private readonly Piece _pawnH;
+        public Piece PawnH
+        {
+            get { return _pawnH; }
+        }
+
+        #endregion
 
         public Set(PieceColor color)
         {
             _color = color;
+
             _king = new Piece(PieceType.King, color);
             _queen = new Piece(PieceType.Queen, color);
-            _bishops = Piece.Generate(PieceType.Bishop, color, 2);
-            _knights = Piece.Generate(PieceType.Knight, color, 2);
-            _rooks = Piece.Generate(PieceType.Rook, color, 2);
-            _pawns = Piece.Generate(PieceType.Pawn, color, 8);
-            var pieces = new List<Piece>
+            _rookA = new Piece(PieceType.Rook, color);
+            _rookH = new Piece(PieceType.Rook, color);
+            _knightB = new Piece(PieceType.Knight, color);
+            _knightG = new Piece(PieceType.Knight, color);
+            _bishopC = new Piece(PieceType.Bishop, color);
+            _bishopF = new Piece(PieceType.Bishop, color);
+            _pawnA = new Piece(PieceType.Pawn, color);
+            _pawnB = new Piece(PieceType.Pawn, color);
+            _pawnC = new Piece(PieceType.Pawn, color);
+            _pawnD = new Piece(PieceType.Pawn, color);
+            _pawnE = new Piece(PieceType.Pawn, color);
+            _pawnF = new Piece(PieceType.Pawn, color);
+            _pawnG = new Piece(PieceType.Pawn, color);
+            _pawnH = new Piece(PieceType.Pawn, color);
+
+            _pieces = new List<Piece>
             {
                 _king,
                 _queen,
+                _rookA,
+                _rookH,
+                _knightB,
+                _knightG,
+                _bishopC,
+                _bishopF,
+                _pawnA,
+                _pawnB,
+                _pawnC,
+                _pawnD,
+                _pawnE,
+                _pawnF,
+                _pawnG,
+                _pawnH,
             };
-            pieces.AddRange(_bishops);
-            pieces.AddRange(_knights);
-            pieces.AddRange(_rooks);
-            pieces.AddRange(_pawns);
-            _pieces = pieces;
-        }
-
-        public IEnumerable<Piece> CapturedPieces
-        {
-            get { return _pieces.Where(p => p.Captured); }
         }
     }
 }
