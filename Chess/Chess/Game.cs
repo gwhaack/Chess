@@ -204,7 +204,7 @@ namespace Chess
             string square = piece.Square != null
                 ? piece.Square.Id
                 : String.Empty;
-            // TODO - figure out how to handle graduated pawns
+            // TODO - figure out how to handle promoted pawns
         }
 
         public bool Move(Piece piece, Square newSquare)
@@ -222,10 +222,10 @@ namespace Chess
             return true;
         }
 
-        private static void GraduatePawn(ref Piece pawn, PieceType newType)
+        private static void PromotePawn(ref Piece pawn, PieceType newType)
         {
             if (pawn.Type != PieceType.Pawn)
-                throw new ArgumentOutOfRangeException("pawn", "Graduating piece must be a pawn");
+                throw new ArgumentOutOfRangeException("pawn", "Promoting piece must be a pawn");
             pawn = new Piece(newType, pawn.Color);
         }
 
