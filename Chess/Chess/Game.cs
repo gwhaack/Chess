@@ -201,9 +201,10 @@ namespace Chess
 
         private static string PieceState(Piece piece)
         {
-            return piece.Square != null
+            string square = piece.Square != null
                 ? piece.Square.Id
                 : String.Empty;
+            // TODO - figure out how to handle graduated pawns
         }
 
         public bool Move(Piece piece, Square newSquare)
@@ -219,6 +220,13 @@ namespace Chess
             oldSquare.Piece = null;
             
             return true;
+        }
+
+        private static void GraduatePawn(ref Piece pawn, PieceType newType)
+        {
+            if (pawn.Type != PieceType.Pawn)
+                throw new ArgumentOutOfRangeException("pawn", "Graduating piece must be a pawn");
+            pawn = new Piece(newType, pawn.Color);
         }
 
         public IList<Square> LegalMoves(Piece piece)
