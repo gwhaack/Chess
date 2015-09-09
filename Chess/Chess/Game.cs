@@ -203,17 +203,17 @@ namespace Chess
 
         private static string PieceState(Piece piece)
         {
-            return piece.Square != null
-                ? piece.Square.Id
-                : String.Empty;
+            if (piece.Captured || piece.Square == null)
+                return String.Empty;
+            return piece.Square.Id;
         }
 
         private static string PawnState(Piece pawn)
         {
             var square = PieceState(pawn);
-            return pawn.Type == PieceType.Pawn
-                ? square
-                : String.Format("{0}_{1}", square, pawn.Type);
+            if (pawn.Type == PieceType.Pawn || String.IsNullOrEmpty(square))
+                return square;
+            return String.Format("{0}_{1}", square, pawn.Type);
         }
 
         #endregion
