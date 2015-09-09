@@ -157,6 +157,8 @@ namespace Chess
             #endregion
         }
 
+        #region State
+
         public State State()
         {
             return new State
@@ -170,14 +172,14 @@ namespace Chess
                 WhiteKnightG = PieceState(WhitePieces.KnightG),
                 WhiteRookH = PieceState(WhitePieces.RookH),
 
-                WhitePawnA = PieceState(WhitePieces.PawnA),
-                WhitePawnB = PieceState(WhitePieces.PawnB),
-                WhitePawnC = PieceState(WhitePieces.PawnC),
-                WhitePawnD = PieceState(WhitePieces.PawnD),
-                WhitePawnE = PieceState(WhitePieces.PawnE),
-                WhitePawnF = PieceState(WhitePieces.PawnF),
-                WhitePawnG = PieceState(WhitePieces.PawnG),
-                WhitePawnH = PieceState(WhitePieces.PawnH),
+                WhitePawnA = PawnState(WhitePieces.PawnA),
+                WhitePawnB = PawnState(WhitePieces.PawnB),
+                WhitePawnC = PawnState(WhitePieces.PawnC),
+                WhitePawnD = PawnState(WhitePieces.PawnD),
+                WhitePawnE = PawnState(WhitePieces.PawnE),
+                WhitePawnF = PawnState(WhitePieces.PawnF),
+                WhitePawnG = PawnState(WhitePieces.PawnG),
+                WhitePawnH = PawnState(WhitePieces.PawnH),
 
                 BlackRookA = PieceState(BlackPieces.RookA),
                 BlackKnightB = PieceState(BlackPieces.KnightB),
@@ -188,24 +190,33 @@ namespace Chess
                 BlackKnightG = PieceState(BlackPieces.KnightG),
                 BlackRookH = PieceState(BlackPieces.RookH),
 
-                BlackPawnA = PieceState(BlackPieces.PawnA),
-                BlackPawnB = PieceState(BlackPieces.PawnB),
-                BlackPawnC = PieceState(BlackPieces.PawnC),
-                BlackPawnD = PieceState(BlackPieces.PawnD),
-                BlackPawnE = PieceState(BlackPieces.PawnE),
-                BlackPawnF = PieceState(BlackPieces.PawnF),
-                BlackPawnG = PieceState(BlackPieces.PawnG),
-                BlackPawnH = PieceState(BlackPieces.PawnH),
+                BlackPawnA = PawnState(BlackPieces.PawnA),
+                BlackPawnB = PawnState(BlackPieces.PawnB),
+                BlackPawnC = PawnState(BlackPieces.PawnC),
+                BlackPawnD = PawnState(BlackPieces.PawnD),
+                BlackPawnE = PawnState(BlackPieces.PawnE),
+                BlackPawnF = PawnState(BlackPieces.PawnF),
+                BlackPawnG = PawnState(BlackPieces.PawnG),
+                BlackPawnH = PawnState(BlackPieces.PawnH),
             };
         }
 
         private static string PieceState(Piece piece)
         {
-            string square = piece.Square != null
+            return piece.Square != null
                 ? piece.Square.Id
                 : String.Empty;
-            // TODO - figure out how to handle promoted pawns
         }
+
+        private static string PawnState(Piece pawn)
+        {
+            var square = PieceState(pawn);
+            return pawn.Type == PieceType.Pawn
+                ? square
+                : String.Format("{0}_{1}", square, pawn.Type);
+        }
+
+        #endregion
 
         public bool Move(Piece piece, Square newSquare)
         {
