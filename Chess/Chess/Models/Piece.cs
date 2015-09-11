@@ -1,5 +1,6 @@
 ﻿using Chess.Enums;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chess.Models
 {
@@ -17,8 +18,12 @@ namespace Chess.Models
         }
         public Square Square { get; set; }
         public IList<Square> LegalMoves { get; set; }
+        public IList<Square> SquaresAttacked { get; set; }
         public bool Moved { get; set; }
-        public bool Captured { get; set; }
+        public bool Captured
+        {
+            get { return Square == null; }
+        }
 
         public Piece(PieceType type, PieceColor color)
         {
