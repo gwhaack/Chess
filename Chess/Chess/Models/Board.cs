@@ -1,11 +1,18 @@
 ﻿using Chess.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Chess.Models
 {
     public class Board
     {
         public const int Size = 8;
         private Square[,] _squares;
+        public IEnumerable<Square> Squares
+        {
+            get { return _squares.Cast<Square>(); }
+        }
 
         public Board()
         {

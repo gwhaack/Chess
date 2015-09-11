@@ -2,6 +2,7 @@
 using Chess.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chess
 {
@@ -158,6 +159,8 @@ namespace Chess
 
         public void StartFromPosition(GameState gameState)
         {
+            throw new NotImplementedException();
+
             Board = new Board();
             BlackPieces = new Set(PieceColor.Black);
             WhitePieces = new Set(PieceColor.White);
@@ -171,17 +174,19 @@ namespace Chess
         {
             foreach (var piece in WhitePieces.Pieces)
             {
-                if (piece.Square == null && !piece.Captured)
-                    return false;
                 if (piece.Square.Piece != piece)
                     return false;
             }
 
             foreach (var piece in BlackPieces.Pieces)
             {
-                if (piece.Square == null && !piece.Captured)
-                    return false;
                 if (piece.Square.Piece != piece)
+                    return false;
+            }
+
+            foreach (var square in Board.Squares)
+            {
+                if (square.Piece.Square == null)
                     return false;
             }
 
@@ -231,6 +236,8 @@ namespace Chess
         }
 
         #endregion
+
+        #region Move
 
         public bool Move(Piece piece, Square to)
         {
@@ -302,6 +309,10 @@ namespace Chess
             pawn = new Piece(newType, pawn.Color);
         }
 
+        #endregion
+
+        #region Determine Legal Moves
+
         public void LegalMoves(ref Piece piece)
         {
             var from = piece.Square;
@@ -347,9 +358,16 @@ namespace Chess
         private IList<Square> LegalKingMoves(Square from, PieceColor currentColor)
         {
             var legalMoves = new List<Square>();
+            var opposingPieces = currentColor == PieceColor.Black
+                ? WhitePieces.Pieces
+                : BlackPieces.Pieces;
             foreach (Direction direction in Enum.GetValues(typeof (Direction)))
             {
-                legalMoves.Add(NextLegalMove(from, direction, currentColor));
+                var square = NextLegalMove(from, direction, currentColor);
+                if (!opposingPieces.Any(p => p.SquaresAttacked.Contains(square)))
+                {
+                    legalMoves.Add(square);
+                }
             }
             return legalMoves;
         }
@@ -457,5 +475,7 @@ namespace Chess
             }
             return nextLegalMoves;
         }
+
+        #endregion
     }
 }
