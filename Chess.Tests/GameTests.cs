@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Chess.Enums;
+using Chess.Models;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace Chess.Tests
@@ -15,41 +17,47 @@ namespace Chess.Tests
 
             var state = game.State();
 
-            Assert.Equal("a1", state.WhiteRookA);
-            Assert.Equal("b1", state.WhiteKnightB);
-            Assert.Equal("c1", state.WhiteBishopC);
-            Assert.Equal("d1", state.WhiteQueen);
-            Assert.Equal("e1", state.WhiteKing);
-            Assert.Equal("f1", state.WhiteBishopF);
-            Assert.Equal("g1", state.WhiteKnightG);
-            Assert.Equal("h1", state.WhiteRookH);
+            Equal(new PieceState { PieceType = PieceType.Rook, SquareId = "a1" }, state.WhiteRookA);
+            Equal(new PieceState { PieceType = PieceType.Knight, SquareId = "b1" }, state.WhiteKnightB);
+            Equal(new PieceState { PieceType = PieceType.Bishop, SquareId = "c1" }, state.WhiteBishopC);
+            Equal(new PieceState { PieceType = PieceType.Queen, SquareId = "d1" }, state.WhiteQueen);  
+            Equal(new PieceState { PieceType = PieceType.King, SquareId = "e1" }, state.WhiteKing);   
+            Equal(new PieceState { PieceType = PieceType.Bishop, SquareId = "f1" }, state.WhiteBishopF);
+            Equal(new PieceState { PieceType = PieceType.Knight, SquareId = "g1" }, state.WhiteKnightG);
+            Equal(new PieceState { PieceType = PieceType.Rook, SquareId = "h1" }, state.WhiteRookH);
 
-            Assert.Equal("a2", state.WhitePawnA);
-            Assert.Equal("b2", state.WhitePawnB);
-            Assert.Equal("c2", state.WhitePawnC);
-            Assert.Equal("d2", state.WhitePawnD);
-            Assert.Equal("e2", state.WhitePawnE);
-            Assert.Equal("f2", state.WhitePawnF);
-            Assert.Equal("g2", state.WhitePawnG);
-            Assert.Equal("h2", state.WhitePawnH);
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "a2" }, state.WhitePawnA);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "b2" }, state.WhitePawnB);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "c2" }, state.WhitePawnC);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "d2" }, state.WhitePawnD);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "e2" }, state.WhitePawnE);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "f2" }, state.WhitePawnF);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "g2" }, state.WhitePawnG);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "h2" }, state.WhitePawnH);
 
-            Assert.Equal("a8", state.BlackRookA);
-            Assert.Equal("b8", state.BlackKnightB);
-            Assert.Equal("c8", state.BlackBishopC);
-            Assert.Equal("d8", state.BlackQueen);
-            Assert.Equal("e8", state.BlackKing);
-            Assert.Equal("f8", state.BlackBishopF);
-            Assert.Equal("g8", state.BlackKnightG);
-            Assert.Equal("h8", state.BlackRookH);
+            Equal(new PieceState { PieceType = PieceType.Rook, SquareId = "a8" }, state.BlackRookA);  
+            Equal(new PieceState { PieceType = PieceType.Knight, SquareId = "b8" }, state.BlackKnightB);
+            Equal(new PieceState { PieceType = PieceType.Bishop, SquareId = "c8" }, state.BlackBishopC);
+            Equal(new PieceState { PieceType = PieceType.Queen, SquareId = "d8" }, state.BlackQueen);  
+            Equal(new PieceState { PieceType = PieceType.King, SquareId = "e8" }, state.BlackKing);   
+            Equal(new PieceState { PieceType = PieceType.Bishop, SquareId = "f8" }, state.BlackBishopF);
+            Equal(new PieceState { PieceType = PieceType.Knight, SquareId = "g8" }, state.BlackKnightG);
+            Equal(new PieceState { PieceType = PieceType.Rook, SquareId = "h8" }, state.BlackRookH);
 
-            Assert.Equal("a7", state.BlackPawnA);
-            Assert.Equal("b7", state.BlackPawnB);
-            Assert.Equal("c7", state.BlackPawnC);
-            Assert.Equal("d7", state.BlackPawnD);
-            Assert.Equal("e7", state.BlackPawnE);
-            Assert.Equal("f7", state.BlackPawnF);
-            Assert.Equal("g7", state.BlackPawnG);
-            Assert.Equal("h7", state.BlackPawnH);
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "a7" }, state.BlackPawnA);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "b7" }, state.BlackPawnB);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "c7" }, state.BlackPawnC);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "d7" }, state.BlackPawnD);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "e7" }, state.BlackPawnE);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "f7" }, state.BlackPawnF);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "g7" }, state.BlackPawnG);  
+            Equal(new PieceState { PieceType = PieceType.Pawn, SquareId = "h7" }, state.BlackPawnH);
+        }
+
+        private void Equal(PieceState expected, PieceState actual)
+        {
+            Assert.Equal(expected.PieceType, actual.PieceType);
+            Assert.Equal(expected.SquareId, actual.SquareId);
         }
     }
 }

@@ -12,15 +12,15 @@ namespace Chess.Tests
         [Trait("Chess", "Models")]
         public void Ctor_a1()
         {
-            int row = 1;
-            var column = Column.a;
+            int rank = 1;
+            var file = File.a;
             var color = SquareColor.Dark;
             string id = "a1";
 
-            var square = new Square(column, row);
+            var square = new Square(file, rank);
 
-            Assert.Equal(row, square.Row);
-            Assert.Equal(column, square.Column);
+            Assert.Equal(rank, square.Rank);
+            Assert.Equal(file, square.File);
             Assert.Equal(color, square.Color);
             Assert.Equal(id, square.Id);
         }
@@ -29,15 +29,15 @@ namespace Chess.Tests
         [Trait("Chess", "Models")]
         public void Ctor_h7()
         {
-            var column = Column.h;
-            int row = 7;
+            var file = File.h;
+            int rank = 7;
             var color = SquareColor.Light;
             string id = "h7";
 
-            var square = new Square(column, row);
+            var square = new Square(file, rank);
 
-            Assert.Equal(column, square.Column);
-            Assert.Equal(row, square.Row);
+            Assert.Equal(file, square.File);
+            Assert.Equal(rank, square.Rank);
             Assert.Equal(color, square.Color);
             Assert.Equal(id, square.Id);
         }

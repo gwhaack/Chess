@@ -17,8 +17,8 @@ namespace Chess.Models
             get { return _color; }
         }
         public Square Square { get; set; }
-        public IList<Square> LegalMoves { get; set; }
-        public IList<Square> SquaresAttacked { get; set; }
+        public IList<Square> Moves { get; set; }
+        public IList<Square> Attacked { get; set; }
         public bool Moved { get; set; }
         public bool Captured
         {
@@ -29,6 +29,9 @@ namespace Chess.Models
         {
             _type = type;
             _color = color;
+
+            Moves = new List<Square>();
+            Attacked = new List<Square>();
         }
     }
 }

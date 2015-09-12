@@ -11,6 +11,7 @@ namespace Chess
         private Board Board;
         private Set BlackPieces;
         private Set WhitePieces;
+        private IEnumerable<Piece> Pieces;
         private Stack<Move> Moves;
         private Stack<Move> UndoneMoves;
 
@@ -19,6 +20,9 @@ namespace Chess
             Board = new Board();
             BlackPieces = new Set(PieceColor.Black);
             WhitePieces = new Set(PieceColor.White);
+            Pieces = BlackPieces.Pieces.Concat(WhitePieces.Pieces);
+            Moves = new Stack<Move>();
+            UndoneMoves = new Stack<Move>();
 
             #region White Pieces
 
@@ -241,7 +245,7 @@ namespace Chess
 
         public bool Move(Piece piece, Square to)
         {
-            if (piece.LegalMoves.Contains(to))
+            if (piece.Moves.Contains(to))
                 return false;
 
             var captured = to.Piece;
@@ -255,6 +259,8 @@ namespace Chess
             to.Piece = piece;
             from.Piece = null;
 
+            TODO - handle castle, pawn promotion, en passant
+
             var move = new Move
             {
                 Captured = captured,
@@ -263,6 +269,12 @@ namespace Chess
                 Piece = piece,
             };
             Moves.Push(move);
+
+            foreach (var p in Pieces)
+            {
+                var pVar = p;
+                SetMoves(ref pVar);
+            }
             
             return true;
         }
@@ -313,160 +325,277 @@ namespace Chess
 
         #region Determine Legal Moves
 
-        public void LegalMoves(ref Piece piece)
+        public void SetMoves(ref Piece piece)
         {
-            var from = piece.Square;
             switch (piece.Type)
             {
                 case PieceType.Bishop:
-                    piece.LegalMoves = LegalBishopMoves(from, piece.Color);
-                    piece.SquaresAttacked = piece.LegalMoves;
+                    BishopMoves(ref piece);
+                    piece.Attacked = piece.Moves;
                     break;
                 case PieceType.King:
-                    piece.LegalMoves = LegalKingMoves(from, piece.Color);
-                    piece.SquaresAttacked = piece.LegalMoves;
+                    KingMoves(ref piece);
+                    piece.Attacked = piece.Moves;
                     break;
                 case PieceType.Knight:
-                    piece.LegalMoves = LegalKnightMoves(from, piece.Color);
-                    piece.SquaresAttacked = piece.LegalMoves;
+                    KnightMoves(ref piece);
+                    piece.Attacked = piece.Moves;
                     break;
                 case PieceType.Pawn:
-                    piece.LegalMoves = LegalPawnMoves(from, piece.Color);
-                    piece.SquaresAttacked = LegalPawnCaptures(from, piece.Color);
+                    PawnMoves(ref piece);
+                    PawnAttacked(ref piece);
                     break;
                 case PieceType.Queen:
-                    piece.LegalMoves = LegalQueenMoves(from, piece.Color);
-                    piece.SquaresAttacked = piece.LegalMoves;
+                    LegalQueenMoves(ref piece);
+                    piece.Attacked = piece.Moves;
                     break;
                 case PieceType.Rook:
-                    piece.LegalMoves = LegalRookMoves(from, piece.Color);
-                    piece.SquaresAttacked = piece.LegalMoves;
+                    RookMoves(ref piece);
+                    piece.Attacked = piece.Moves;
                     break;
             }
         }
         
-        private IList<Square> LegalBishopMoves(Square from, PieceColor currentColor)
+        private void BishopMoves(ref Piece bishop)
         {
-            var legalMoves = new List<Square>();
-            legalMoves.AddRange(NextLegalMoves(from, Direction.UpperLeft, currentColor));
-            legalMoves.AddRange(NextLegalMoves(from, Direction.UpperRight, currentColor));
-            legalMoves.AddRange(NextLegalMoves(from, Direction.LowerLeft, currentColor));
-            legalMoves.AddRange(NextLegalMoves(from, Direction.LowerRight, currentColor));
-            return legalMoves;
+            var moves = new List<Square>();
+
+            moves.AddRange(NextLegalMoves(bishop.Square, Direction.UpperLeft, bishop.Color));
+            moves.AddRange(NextLegalMoves(bishop.Square, Direction.UpperRight, bishop.Color));
+            moves.AddRange(NextLegalMoves(bishop.Square, Direction.LowerLeft, bishop.Color));
+            moves.AddRange(NextLegalMoves(bishop.Square, Direction.LowerRight, bishop.Color));
+
+            bishop.Moves = moves;
         }
 
-        private IList<Square> LegalKingMoves(Square from, PieceColor currentColor)
+        private void KingMoves(ref Piece king)
         {
-            var legalMoves = new List<Square>();
-            var opposingPieces = currentColor == PieceColor.Black
+            var moves = new List<Square>();
+
+            var opposingPieces = king.Color == PieceColor.Black
                 ? WhitePieces.Pieces
                 : BlackPieces.Pieces;
             foreach (Direction direction in Enum.GetValues(typeof (Direction)))
             {
-                var square = NextLegalMove(from, direction, currentColor);
-                if (!opposingPieces.Any(p => p.SquaresAttacked.Contains(square)))
+                var square = NextMove(king.Square, direction, king.Color);
+                if (!opposingPieces.Any(p => p.Attacked.Contains(square)))
                 {
-                    legalMoves.Add(square);
+                    moves.Add(square);
                 }
             }
-            return legalMoves;
+
+            var castleRook = king.Color == PieceColor.Black
+                ? BlackPieces.RookH
+                : WhitePieces.RookH;
+            if (!king.Moved && !castleRook.Moved)
+            {
+                var rightOne = NextMove(king.Square, Direction.Right, king.Color);
+                if (rightOne != null)
+                {
+                    var castle = NextMove(rightOne, Direction.Right, king.Color);
+                    if (castle != null)
+                    {
+                        moves.Add(castle);
+                    }
+                }
+            }
+
+            king.Moves = moves;
         }
 
-        private IList<Square> LegalKnightMoves(Square from, PieceColor currentColor)
+        private void KnightMoves(ref Piece knight)
         {
-            throw new NotImplementedException();
+            var moves = new List<Square>();
+
+            var up = NextSquare(knight.Square, Direction.Up);
+            var upLeft = NextMove(up, Direction.UpperLeft, knight.Color);
+            if (upLeft != null) moves.Add(upLeft);
+            var upRight = NextMove(up, Direction.UpperRight, knight.Color);
+            if (upRight != null) moves.Add(upRight);
+
+            var left = NextSquare(knight.Square, Direction.Left);
+            var leftUp = NextMove(left, Direction.UpperLeft, knight.Color);
+            if (leftUp != null) moves.Add(leftUp);
+            var leftDown = NextMove(left, Direction.LowerLeft, knight.Color);
+            if (leftDown != null) moves.Add(leftDown);
+
+            var right = NextSquare(knight.Square, Direction.Right);
+            var rightUp = NextMove(right, Direction.UpperRight, knight.Color);
+            if (rightUp != null) moves.Add(rightUp);
+            var rightDown = NextMove(right, Direction.LowerRight, knight.Color);
+            if (rightDown != null) moves.Add(rightDown);
+
+            var down = NextSquare(knight.Square, Direction.Down);
+            var downLeft = NextMove(down, Direction.LowerLeft, knight.Color);
+            if (downLeft != null) moves.Add(downLeft);
+            var downRight = NextMove(down, Direction.LowerRight, knight.Color);
+            if (downRight != null) moves.Add(downRight);
+
+            knight.Moves = moves;
         }
 
-        private IList<Square> LegalPawnMoves(Square from, PieceColor currentColor)
+        private void PawnMoves(ref Piece pawn)
         {
-            throw new NotImplementedException();
+            var moves = new List<Square>();
+
+            var direction = pawn.Color == PieceColor.White
+                ? Direction.Up
+                : Direction.Down;
+            var squareOne = NextMove(pawn.Square, direction, pawn.Color);
+            if (squareOne != null)
+            {
+                moves.Add(squareOne);
+                if (!pawn.Moved)
+                {
+                    var squareTwo = NextMove(squareOne, direction, pawn.Color);
+                    if (squareTwo != null)
+                    {
+                        moves.Add(squareTwo);
+                    }
+                }
+            }
+
+            pawn.Moves = moves;
         }
 
-        private IList<Square> LegalPawnCaptures(Square from, PieceColor currentColor)
+        private void PawnAttacked(ref Piece pawn)
         {
-            throw new NotImplementedException();
+            var attacked = new List<Square>();
+            bool white = pawn.Color == PieceColor.White;
+
+            var leftDirection = white
+                ? Direction.UpperLeft
+                : Direction.LowerLeft;
+            var leftAttack = NextSquare(pawn.Square, leftDirection);
+            if (leftAttack.Piece.Color != pawn.Color)
+            {
+                attacked.Add(leftAttack);
+            }
+
+            var rightDirection = white
+                ? Direction.UpperRight
+                : Direction.LowerRight;
+            var rightAttack = NextSquare(pawn.Square, rightDirection);
+            if (rightAttack.Piece.Color != pawn.Color)
+            {
+                attacked.Add(rightAttack);
+            }
+
+            // En passant
+            int rank = white
+                ? 5
+                : 4;
+
+            if (pawn.Square.Rank == rank)
+            {
+                var left = NextSquare(pawn.Square, Direction.Left);
+                if (left != null && left.Piece != null && left.Piece.Color != pawn.Color && left.Piece.Type == PieceType.Pawn)
+                {
+                    var lastMove = Moves.Peek();
+                    if (lastMove.Piece == left.Piece && lastMove.FirstMove)
+                    {
+                        attacked.Add(leftAttack);
+                    }
+                }
+
+                var right = NextSquare(pawn.Square, Direction.Right);
+                if (right != null && right.Piece != null && right.Piece.Color != pawn.Color && right.Piece.Type == PieceType.Pawn)
+                {
+                    var lastMove = Moves.Peek();
+                    if (lastMove.Piece == right.Piece && lastMove.FirstMove)
+                    {
+                        attacked.Add(rightAttack);
+                    }
+                }
+            }
+
+            pawn.Attacked = attacked;
         }
 
-        private IList<Square> LegalQueenMoves(Square from, PieceColor currentColor)
+        private void LegalQueenMoves(ref Piece queen)
         {
-            var legalMoves = new List<Square>();
+            var moves = new List<Square>();
+
             foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
-                legalMoves.AddRange(NextLegalMoves(from, direction, currentColor));
+                moves.AddRange(NextLegalMoves(queen.Square, direction, queen.Color));
             }
-            return legalMoves;
+
+            queen.Moves = moves;
         }
 
-        private IList<Square> LegalRookMoves(Square from, PieceColor currentColor)
+        private void RookMoves(ref Piece rook)
         {
-            var legalMoves = new List<Square>();
-            legalMoves.AddRange(NextLegalMoves(from, Direction.Up, currentColor));
-            legalMoves.AddRange(NextLegalMoves(from, Direction.Down, currentColor));
-            legalMoves.AddRange(NextLegalMoves(from, Direction.Left, currentColor));
-            legalMoves.AddRange(NextLegalMoves(from, Direction.Right, currentColor));
-            return legalMoves;
+            var moves = new List<Square>();
+
+            moves.AddRange(NextLegalMoves(rook.Square, Direction.Up, rook.Color));
+            moves.AddRange(NextLegalMoves(rook.Square, Direction.Down, rook.Color));
+            moves.AddRange(NextLegalMoves(rook.Square, Direction.Left, rook.Color));
+            moves.AddRange(NextLegalMoves(rook.Square, Direction.Right, rook.Color));
+
+            rook.Moves = moves;
         }
+
         private Square NextSquare(Square from, Direction direction)
         {
-            int col = (int) from.Column;
-            int row = from.Row;
+            int file = (int) from.File;
+            int rank = from.Rank;
             switch (direction)
             {
                 case Direction.Up:
-                    row += 1;
+                    rank += 1;
                     break;
                 case Direction.Down:
-                    row -= 1;
+                    rank -= 1;
                     break;
                 case Direction.Left:
-                    col -= 1;
+                    file -= 1;
                     break;
                 case Direction.Right:
-                    col += 1;
+                    file += 1;
                     break;
                 case Direction.UpperLeft:
-                    row += 1;
-                    col -= 1;
+                    rank += 1;
+                    file -= 1;
                     break;
                 case Direction.UpperRight:
-                    row += 1;
-                    col += 1;
+                    rank += 1;
+                    file += 1;
                     break;
                 case Direction.LowerLeft:
-                    row -= 1;
-                    col -= 1;
+                    rank -= 1;
+                    file -= 1;
                     break;
                 case Direction.LowerRight:
-                    row -= 1;
-                    col += 1;
+                    rank -= 1;
+                    file += 1;
                     break;
                 default:
                     return null;
             }
-            if (row > Board.Size || row < 0 || col > Board.Size || col < 0)
+            if (rank > Board.Size || rank < 0 || file > Board.Size || file < 0)
                 return null;
-            var column = (Column) col;
-            return Board[Square.GetId(column, row)];
+            return Board[Square.GetId((File) file, rank)];
         }
 
-        private Square NextLegalMove(Square from, Direction direction, PieceColor currentColor)
+        private Square NextMove(Square from, Direction direction, PieceColor pieceColor)
         {
             var next = NextSquare(from, direction);
             if (next == null) return null;
-            if (next.Piece == null || next.Piece.Color != currentColor)
+            if (next.Piece == null || next.Piece.Color != pieceColor)
                 return next;
             return null;
         }
 
-        private IList<Square> NextLegalMoves(Square from, Direction direction, PieceColor currentColor)
+        private IList<Square> NextLegalMoves(Square from, Direction direction, PieceColor pieceColor)
         {
             var nextLegalMoves = new List<Square>();
             var current = from;
             while (true)
             {
-                var next = NextLegalMove(from, direction, currentColor);
+                var next = NextMove(from, direction, pieceColor);
                 if (next == null) break;
-                if (next.Piece == null || next.Piece.Color != currentColor)
+                if (next.Piece == null || next.Piece.Color != pieceColor)
                 {
                     nextLegalMoves.Add(next);
                     current = next;

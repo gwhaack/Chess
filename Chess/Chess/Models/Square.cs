@@ -5,8 +5,8 @@ namespace Chess.Models
 {
     public class Square
     {
-        public readonly Column Column;
-        public readonly int Row;
+        private readonly File _file;
+        private readonly int _rank;
         private readonly SquareColor _color;
         public SquareColor Color
         {
@@ -16,23 +16,33 @@ namespace Chess.Models
         {
             get
             {
-                return GetId(Column, Row);
+                return GetId(File, Rank);
             }
         }
         public Piece Piece { get; set; }
 
-        public Square(Column column, int row)
+        public int Rank
         {
-            Column = column;
-            Row = row;
-            _color = (row + (int) column) % 2 == 0
+            get { return _rank; }
+        }
+
+        public File File
+        {
+            get { return _file; }
+        }
+
+        public Square(File file, int rank)
+        {
+            _file = file;
+            _rank = rank;
+            _color = (rank + (int) file) % 2 == 0
                 ? SquareColor.Dark
                 : SquareColor.Light;
         }
 
-        public static string GetId(Column column, int row)
+        public static string GetId(File file, int rank)
         {
-            return String.Format("{0}{1}", column, row);
+            return String.Format("{0}{1}", file, rank);
         }
     }
 }

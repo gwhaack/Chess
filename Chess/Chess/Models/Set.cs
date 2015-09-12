@@ -13,7 +13,7 @@ namespace Chess.Models
         }
 
         private readonly List<Piece> _pieces;
-        public IReadOnlyCollection<Piece> Pieces
+        public IEnumerable<Piece> Pieces
         {
             get { return _pieces.AsReadOnly(); }
         }

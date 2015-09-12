@@ -17,12 +17,12 @@ namespace Chess.Models
         public Board()
         {
             _squares = new Square[Size, Size];
-            for (int col = 1; col <= Size; col++)
+            for (int file = 1; file <= Size; file++)
             {
-                for (int row = 1; row <= Size; row++)
+                for (int rank = 1; rank <= Size; rank++)
                 {
-                    var column = (Column) col;
-                    this[Square.GetId(column, row)] = new Square(column, row);
+                    var fileEnum = (File) file;
+                    this[Square.GetId(fileEnum, rank)] = new Square(fileEnum, rank);
                 }
             }
         }
@@ -34,18 +34,18 @@ namespace Chess.Models
             get
             {
                 ValidateInput(squareId);
-                var column = GetColumnInput(squareId);
-                int row = GetRowInput(squareId);
+                var file = GetFileInput(squareId);
+                int rank = GetRankInput(squareId);
 
-                return _squares[row - 1, (int) column - 1];
+                return _squares[rank - 1, (int) file - 1];
             }
             private set
             {
                 ValidateInput(squareId);
-                var column = GetColumnInput(squareId);
-                int row = GetRowInput(squareId);
+                var file = GetFileInput(squareId);
+                int rank = GetRankInput(squareId);
 
-                _squares[row - 1, (int) column - 1] = value;
+                _squares[rank - 1, (int) file - 1] = value;
             }
         }
 
@@ -57,22 +57,22 @@ namespace Chess.Models
                 throw new ArgumentOutOfRangeException("squareId", "Square ID must be two characters.");
         }
 
-        private static int GetRowInput(string squareId)
+        private static int GetRankInput(string squareId)
         {
-            string rowInput = squareId.Substring(1, 1);
-            int row;
-            if (!Int32.TryParse(rowInput, out row) || row < 1 || row > Size)
-                throw new ArgumentOutOfRangeException("squareId", "Row must be a number between 1 and 8, inclusive.");
-            return row;
+            string rankInput = squareId.Substring(1, 1);
+            int rank;
+            if (!Int32.TryParse(rankInput, out rank) || rank < 1 || rank > Size)
+                throw new ArgumentOutOfRangeException("squareId", "Rank must be a number between 1 and 8, inclusive.");
+            return rank;
         }
 
-        private static Column GetColumnInput(string squareId)
+        private static File GetFileInput(string squareId)
         {
-            string columnInput = squareId.Substring(0, 1).ToLower();
-            Column column;
-            if (!Enum.TryParse(columnInput, out column))
-                throw new ArgumentOutOfRangeException("squareId", "Column must be a letter between a and h, inclusive.");
-            return column;
+            string fileInput = squareId.Substring(0, 1).ToLower();
+            File file;
+            if (!Enum.TryParse(fileInput, out file))
+                throw new ArgumentOutOfRangeException("squareId", "File must be a letter between a and h, inclusive.");
+            return file;
         }
 
         #endregion
