@@ -4,120 +4,181 @@ using System.Linq;
 
 namespace Chess.Models
 {
+    /// <summary>
+    /// A complete set of chess pieces.
+    /// </summary>
     public class Set
     {
-        private readonly PieceColor _color;
+        /// <summary>
+        /// <see cref="PieceColor"/>
+        /// </summary>
         public PieceColor Color
         {
             get { return _color; }
         }
+        private readonly PieceColor _color;
 
-        private readonly List<Piece> _pieces;
+        /// <summary>
+        /// All pieces in the set.
+        /// </summary>
         public IEnumerable<Piece> Pieces
         {
             get { return _pieces.AsReadOnly(); }
         }
+        private readonly List<Piece> _pieces;
 
         #region Pieces
 
-        private readonly Piece _king;
+        /// <summary>
+        /// The king.
+        /// </summary>
         public Piece King
         {
             get { return _king; }
         }
+        private readonly Piece _king;
 
-        private readonly Piece _queen;
+        /// <summary>
+        /// The queen.
+        /// </summary>
         public Piece Queen
         {
             get { return _queen; }
         }
+        private readonly Piece _queen;
 
-        private readonly Piece _rookA;
+        /// <summary>
+        /// The rook that began on the A file.
+        /// </summary>
         public Piece RookA
         {
             get { return _rookA; }
         }
-
-        private readonly Piece _rookH;
+        private readonly Piece _rookA;
+        
+        /// <summary>
+        /// The rook that began on the H file.
+        /// </summary>
         public Piece RookH
         {
             get { return _rookH; }
         }
+        private readonly Piece _rookH;
 
-        private readonly Piece _knightB;
+        /// <summary>
+        /// The knight that began on the B file.
+        /// </summary>
         public Piece KnightB
         {
             get { return _knightB; }
         }
-
-        private readonly Piece _knightG;
+        private readonly Piece _knightB;
+        
+        /// <summary>
+        /// The knight that began on the G file.
+        /// </summary>
         public Piece KnightG
         {
             get { return _knightG; }
         }
-
-        private readonly Piece _bishopC;
+        private readonly Piece _knightG;
+        
+        /// <summary>
+        /// The bishop that began on the C file.
+        /// </summary>
         public Piece BishopC
         {
             get { return _bishopC; }
         }
+        private readonly Piece _bishopC;
 
-        private readonly Piece _bishopF;
+        /// <summary>
+        /// The bishop that began on the F file.
+        /// </summary>
         public Piece BishopF
         {
             get { return _bishopF; }
         }
+        private readonly Piece _bishopF;
 
-        private readonly Piece _pawnA;
+        /// <summary>
+        /// The pawn that began on the A file.
+        /// </summary>
         public Piece PawnA
         {
             get { return _pawnA; }
         }
+        private readonly Piece _pawnA;
 
-        private readonly Piece _pawnB;
+        /// <summary>
+        /// The pawn that began on the B file.
+        /// </summary>
         public Piece PawnB
         {
             get { return _pawnB; }
         }
+        private readonly Piece _pawnB;
 
-        private readonly Piece _pawnC;
+        /// <summary>
+        /// The pawn that began on the C file.
+        /// </summary>
         public Piece PawnC
         {
             get { return _pawnC; }
         }
-
-        private readonly Piece _pawnD;
+        private readonly Piece _pawnC;
+        
+        /// <summary>
+        /// The pawn that began on the D file.
+        /// </summary>
         public Piece PawnD
         {
             get { return _pawnD; }
         }
+        private readonly Piece _pawnD;
 
-        private readonly Piece _pawnE;
+        /// <summary>
+        /// The pawn that began on the E file.
+        /// </summary>
         public Piece PawnE
         {
             get { return _pawnE; }
         }
+        private readonly Piece _pawnE;
 
-        private readonly Piece _pawnF;
+        /// <summary>
+        /// The pawn that began on the F file.
+        /// </summary>
         public Piece PawnF
         {
             get { return _pawnF; }
         }
-
-        private readonly Piece _pawnG;
+        private readonly Piece _pawnF;
+        
+        /// <summary>
+        /// The pawn that began on the G file.
+        /// </summary>
         public Piece PawnG
         {
             get { return _pawnG; }
         }
+        private readonly Piece _pawnG;
 
-        private readonly Piece _pawnH;
+        /// <summary>
+        /// The pawn that began on the H file.
+        /// </summary>
         public Piece PawnH
         {
             get { return _pawnH; }
         }
+        private readonly Piece _pawnH;
 
         #endregion
 
+        /// <summary>
+        /// Instantiate <see cref="Set"/>
+        /// </summary>
+        /// <param name="color"><see cref="Color"/></param>
         public Set(PieceColor color)
         {
             _color = color;

@@ -1,5 +1,8 @@
 ﻿namespace Chess.Models
 {
+    /// <summary>
+    /// Snapshot of the game.
+    /// </summary>
     public class GameState
     {
         // White Pieces

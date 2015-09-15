@@ -1,5 +1,8 @@
 ﻿namespace Chess.Enums
 {
+    /// <summary>
+    /// A through H (i.e. column).
+    /// </summary>
     public enum File
     {
         a = 1,
