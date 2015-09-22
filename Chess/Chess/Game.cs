@@ -200,46 +200,49 @@ namespace Chess
         /// Take a snapshot of the game.
         /// </summary>
         /// <returns>A GameState object.</returns>
-        public GameState State()
+        public GameState State
         {
-            return new GameState
+            get
             {
-                WhiteRookA = new PieceState(WhitePieces.RookA),
-                WhiteKnightB = new PieceState(WhitePieces.KnightB),
-                WhiteBishopC = new PieceState(WhitePieces.BishopC),
-                WhiteQueen = new PieceState(WhitePieces.Queen),
-                WhiteKing = new PieceState(WhitePieces.King),
-                WhiteBishopF = new PieceState(WhitePieces.BishopF),
-                WhiteKnightG = new PieceState(WhitePieces.KnightG),
-                WhiteRookH = new PieceState(WhitePieces.RookH),
+                return new GameState
+                {
+                    WhiteRookA = new PieceState(WhitePieces.RookA),
+                    WhiteKnightB = new PieceState(WhitePieces.KnightB),
+                    WhiteBishopC = new PieceState(WhitePieces.BishopC),
+                    WhiteQueen = new PieceState(WhitePieces.Queen),
+                    WhiteKing = new PieceState(WhitePieces.King),
+                    WhiteBishopF = new PieceState(WhitePieces.BishopF),
+                    WhiteKnightG = new PieceState(WhitePieces.KnightG),
+                    WhiteRookH = new PieceState(WhitePieces.RookH),
 
-                WhitePawnA = new PieceState(WhitePieces.PawnA),
-                WhitePawnB = new PieceState(WhitePieces.PawnB),
-                WhitePawnC = new PieceState(WhitePieces.PawnC),
-                WhitePawnD = new PieceState(WhitePieces.PawnD),
-                WhitePawnE = new PieceState(WhitePieces.PawnE),
-                WhitePawnF = new PieceState(WhitePieces.PawnF),
-                WhitePawnG = new PieceState(WhitePieces.PawnG),
-                WhitePawnH = new PieceState(WhitePieces.PawnH),
+                    WhitePawnA = new PieceState(WhitePieces.PawnA),
+                    WhitePawnB = new PieceState(WhitePieces.PawnB),
+                    WhitePawnC = new PieceState(WhitePieces.PawnC),
+                    WhitePawnD = new PieceState(WhitePieces.PawnD),
+                    WhitePawnE = new PieceState(WhitePieces.PawnE),
+                    WhitePawnF = new PieceState(WhitePieces.PawnF),
+                    WhitePawnG = new PieceState(WhitePieces.PawnG),
+                    WhitePawnH = new PieceState(WhitePieces.PawnH),
 
-                BlackRookA = new PieceState(BlackPieces.RookA),
-                BlackKnightB = new PieceState(BlackPieces.KnightB),
-                BlackBishopC = new PieceState(BlackPieces.BishopC),
-                BlackQueen = new PieceState(BlackPieces.Queen),
-                BlackKing = new PieceState(BlackPieces.King),
-                BlackBishopF = new PieceState(BlackPieces.BishopF),
-                BlackKnightG = new PieceState(BlackPieces.KnightG),
-                BlackRookH = new PieceState(BlackPieces.RookH),
+                    BlackRookA = new PieceState(BlackPieces.RookA),
+                    BlackKnightB = new PieceState(BlackPieces.KnightB),
+                    BlackBishopC = new PieceState(BlackPieces.BishopC),
+                    BlackQueen = new PieceState(BlackPieces.Queen),
+                    BlackKing = new PieceState(BlackPieces.King),
+                    BlackBishopF = new PieceState(BlackPieces.BishopF),
+                    BlackKnightG = new PieceState(BlackPieces.KnightG),
+                    BlackRookH = new PieceState(BlackPieces.RookH),
 
-                BlackPawnA = new PieceState(BlackPieces.PawnA),
-                BlackPawnB = new PieceState(BlackPieces.PawnB),
-                BlackPawnC = new PieceState(BlackPieces.PawnC),
-                BlackPawnD = new PieceState(BlackPieces.PawnD),
-                BlackPawnE = new PieceState(BlackPieces.PawnE),
-                BlackPawnF = new PieceState(BlackPieces.PawnF),
-                BlackPawnG = new PieceState(BlackPieces.PawnG),
-                BlackPawnH = new PieceState(BlackPieces.PawnH),
-            };
+                    BlackPawnA = new PieceState(BlackPieces.PawnA),
+                    BlackPawnB = new PieceState(BlackPieces.PawnB),
+                    BlackPawnC = new PieceState(BlackPieces.PawnC),
+                    BlackPawnD = new PieceState(BlackPieces.PawnD),
+                    BlackPawnE = new PieceState(BlackPieces.PawnE),
+                    BlackPawnF = new PieceState(BlackPieces.PawnF),
+                    BlackPawnG = new PieceState(BlackPieces.PawnG),
+                    BlackPawnH = new PieceState(BlackPieces.PawnH),
+                };
+            }
         }
 
         #endregion
@@ -439,6 +442,7 @@ namespace Chess
         /// <param name="piece"><see cref="Piece"/></param>
         public void SetMoves(ref Piece piece)
         {
+            TODO - discovered checks, stalemate
             switch (piece.Type)
             {
                 case PieceType.Bishop:
